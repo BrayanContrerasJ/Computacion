@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tarea</title>
+    <style>
+      html, body { margin: 0; padding: 0; overflow: hidden; }
+    </style>
+  </head>
+  <body>
+    <script src="js/three.min.js"></script>
+    <script>
+		var scene, aspect, camera, renderer;
+		var startTime = Date.now();
+		
+		init();
+		animate();
+	
+		function init(){
+			scene = new THREE.Scene();
+			aspect = window.innerWidth / window.innerHeight;
+			camera = new THREE.PerspectiveCamera( 45, aspect, 0.1, 1000);
+			renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+				  
+			var size = 10;
+			var arrowSize = 1;
+			var divisions = size;
+			var origin = new THREE.Vector3( 0, 0, 0 );
+			var x = new THREE.Vector3( 1, 0, 0 );
+			var y = new THREE.Vector3( 0, 1, 0 );
+		  	var z = new THREE.Vector3( 0, 0, 1 );
+			var color1 = new THREE.Color( 0xFFFFFF );
+		  	var color2 = new THREE.Color( 0x333333 );
+		  	var colorR = new THREE.Color( 0xAA3333 );
+		  	var colorG = new THREE.Color( 0x33AA33 );
+		  	var colorB = new THREE.Color( 0x333366 );
+		  
+		  	//CREAR LAS GRILLAS PARA EL ESCENARIO
+		  	var axesHelper = new THREE.AxesHelper( size );
+		  	var gridHelperXY = new THREE.GridHelper( size, divisions, color1, color1);
+		  	var gridHelperXZ = new THREE.GridHelper( size, divisions, color2, color2 );
+		  	var gridHelperYZ = new THREE.GridHelper( size, divisions, color2, color2 );
+            
+            //ROTARLAS PARA QUE QUEDEN EN EL ESPACIO ADECUADO
+            gridHelperXY.rotateOnWorldAxis ( x, THREE.Math.degToRad(90) );
+            gridHelperXZ.rotateOnWorldAxis ( y, THREE.Math.degToRad(90) );
+            gridHelperYZ.rotateOnWorldAxis ( z, THREE.Math.degToRad(90) );
+            
+            //CREAR LAS FLECHAS QUE INDICAN LOS EJES DE COORDENADAS 3D
+            var arrowX = new THREE.ArrowHelper( x, origin, arrowSize, colorR );
+            var arrowY = new THREE.ArrowHelper( y, origin, arrowSize, colorG );
+            var arrowZ = new THREE.ArrowHelper( z, origin, arrowSize, colorB );
+			
+			//CREAR LAS GEOMETRÍAS
+            //Punto
+            var geoCilindro = new THREE.Geometry();
+            var zTemp = 0;
+            var res = 25.0;
+            for( var i = 0; i < res; i++){
+                for( var j = 0; j < res; j++){
+                    var punto = new THREE.Vector3();
+                    punto.x = (2.0 * (res - i) / res ) * Math.cos( ( j * 2.0 * Math.PI ) / res) ;
+                    punto.y = 2.0 * i / res;
+                    punto.z = (2.0 * (res - i) / res ) * Math.sin( ( j * 2.0 * Math.PI ) / res) ;
+                    geoCilindro.vertices.push( punto );
+
+                }
+            }
+			
+
+			 var geoCilindro4 = new THREE.Geometry();
+            var zTemp = 0;
+            var res = 25.0;
+            for( var i = 0; i < res; i++){
+                for( var j = 0; j < res; j++){
+                    var punto = new THREE.Vector3();
+                    punto.x = (1.0 * (res - i) / res ) * Math.cos( ( j * 1.0 * Math.PI ) / res) ;
+                    punto.y = 2.0 * i / res;
+                    punto.z = (1.0 * (res - i) / res ) * Math.sin( ( j * 1.0 * Math.PI ) / res) ;
+                    geoCilindro4.vertices.push( punto );
+
+                }
+            }
+
+            var geoCilindro6 = new THREE.Geometry();
+            var zTemp = 0;
+            var res = 25.0;
+            for( var i = 0; i < res; i++){
+                for( var j = 0; j < res; j++){
+                    var punto = new THREE.Vector3();
+                    punto.x = (2.0 * (res - i) / res ) * Math.cos( ( j * 2.0 * Math.PI ) / res) ;
+                    punto.y = 5.0 * i / res;
+                    punto.z = (2.0 * (res - i) / res ) * Math.sin( ( j * 2.0 * Math.PI ) / res) ;
+                    geoCilindro6.vertices.push( punto );
+
+                }
+            }
+			
+			
+
+
+			var geoCilindro1 = new THREE.Geometry();
+            var zTemp = 0;
+            var res = 25.0;
+            for( var i = 0; i < res; i++){
+                for( var j = 0; j < res; j++){
+                    var punto = new THREE.Vector3();
+                    punto.x = 2 * Math.cos( ( j * 2 * Math.PI )/res);
+                    punto.y = 3 * i/res;
+                    punto.z = 2 * Math.sin( ( j * 2 * Math.PI )/res);
+                    geoCilindro1.vertices.push( punto );
+                 
+
+                }
+            }
+
+            var geoCilindro5 = new THREE.Geometry();
+            var zTemp = 0;
+            var res = 25.0;
+            for( var i = 0; i < res; i++){
+                for( var j = 0; j < res; j++){
+                    var punto = new THREE.Vector3();
+                    punto.x = 2 * Math.cos( ( j * 2 * Math.PI )/res);
+                    punto.y = 3 * i/res;
+                    punto.z = 2 * Math.sin( ( j * 2 * Math.PI )/res);
+                    geoCilindro5.vertices.push( punto );
+                 
+
+                }
+            }
+
+
+            var geoCilindro2 = new THREE.Geometry();
+            var zTemp = 0;
+            var res = 25.0;
+            for( var i = 0; i < res; i++){
+                for( var j = 0; j < res; j++){
+                    var punto = new THREE.Vector3();
+                    punto.x = 1 * Math.cos( ( j * 1 * Math.PI )/res);
+                    punto.y = 3 * i/res;
+                    punto.z = 1 * Math.sin( ( j * 1 * Math.PI )/res);
+                    geoCilindro2.vertices.push( punto );
+                 
+
+                }
+            }
+
+ var geoCilindro7 = new THREE.Geometry();
+            var zTemp = 0;
+            var res = 25.0;
+            for( var i = 0; i < res; i++){
+                for( var j = 0; j < res; j++){
+                    var punto = new THREE.Vector3();
+                    punto.x = 1 * Math.cos( ( j * 2 * Math.PI )/res);
+                    punto.y = 5 * i/res;
+                    punto.z = 1 * Math.sin( ( j * 2 * Math.PI )/res);
+                    geoCilindro7.vertices.push( punto );
+                 
+
+                }
+            }
+
+
+ var geoCilindro8 = new THREE.Geometry();
+            var zTemp = 0;
+            var res = 25.0;
+            for( var i = 0; i < res; i++){
+                for( var j = 0; j < res; j++){
+                    var punto = new THREE.Vector3();
+                    punto.x = (1.0 * (res - i) / res ) * Math.cos( ( j * 2.0 * Math.PI ) / res) ;
+                    punto.y = 2.0 * i / res;
+                    punto.z = (1.0 * (res - i) / res ) * Math.sin( ( j * 2.0 * Math.PI ) / res) ;
+                    geoCilindro8.vertices.push( punto );
+
+                }
+            }
+
+
+ var geoCilindro9 = new THREE.Geometry();
+            var zTemp = 0;
+            var res = 25.0;
+            for( var i = 0; i < res; i++){
+                for( var j = 0; j < res; j++){
+                    var punto = new THREE.Vector3();
+                    punto.x = 2 * Math.cos( ( j * 2 * Math.PI )/res);
+                    punto.y = 3 * i/res;
+                    punto.z = 2 * Math.sin( ( j * 2 * Math.PI )/res);
+                    geoCilindro9.vertices.push( punto );
+                 
+
+                }
+            }
+    
+     var geoCilindro10 = new THREE.Geometry();
+            var zTemp = 0;
+            var res = 25.0;
+            for( var i = 0; i < res; i++){
+                for( var j = 0; j < res; j++){
+                    var punto = new THREE.Vector3();
+                    punto.x = 2 * Math.cos( ( j * 2 * Math.PI )/res);
+                    punto.y = 3 * i/res;
+                    punto.z = 2 * Math.sin( ( j * 2 * Math.PI )/res);
+                    geoCilindro10.vertices.push( punto );
+                 
+
+                }
+            }
+
+             var geoCilindro11 = new THREE.Geometry();
+            var zTemp = 0;
+            var res = 25.0;
+            for( var i = 0; i < res; i++){
+                for( var j = 0; j < res; j++){
+                    var punto = new THREE.Vector3();
+                    punto.x = (2.0 * (res - i) / res ) * Math.cos( ( j * 2.0 * Math.PI ) / res) ;
+                    punto.y = 2.0 * i / res;
+                    punto.z = (2.0 * (res - i) / res ) * Math.sin( ( j * 2.0 * Math.PI ) / res) ;
+                    geoCilindro11.vertices.push( punto );
+
+                }
+            }
+
+
+            var geoCilindro12 = new THREE.Geometry();
+            var zTemp = 0;
+            var res = 25.0;
+            for( var i = 0; i < res; i++){
+                for( var j = 0; j < res; j++){
+                    var punto = new THREE.Vector3();
+                    punto.x = (2.0 * (res - i) / res ) * Math.cos( ( j * 2.0 * Math.PI ) / res) ;
+                    punto.y = 2.0 * i / res;
+                    punto.z = (2.0 * (res - i) / res ) * Math.sin( ( j * 2.0 * Math.PI ) / res) ;
+                    geoCilindro12.vertices.push( punto );
+
+                }
+            }
+			
+    
+    
+
+         
+			//CREAR LOS MATERIALES
+			var matLinea = new THREE.LineBasicMaterial( { color: 0x0000ff } );            
+			var matPunto = new THREE.PointsMaterial( { color: 0x6BBF8E, size: 0.2 } );
+			
+
+
+			//CREAR LOS OBJETOS
+			var cilindro1 = new THREE.Line( geoCilindro1, matLinea );
+			var cilindro2 = new THREE.Line( geoCilindro2, matLinea );
+			var cilindro = new THREE.Points( geoCilindro, matPunto );
+			var cilindro4 = new THREE.Points( geoCilindro4, matPunto );
+			var cilindro5 = new THREE.Line( geoCilindro5, matLinea );
+			var cilindro6 = new THREE.Points( geoCilindro, matPunto );
+				var cilindro7 = new THREE.Line( geoCilindro7, matLinea );
+					var cilindro8 = new THREE.Points( geoCilindro8, matPunto );
+					var cilindro9 = new THREE.Line( geoCilindro9, matLinea );
+					var cilindro10 = new THREE.Line( geoCilindro10, matLinea );
+					var cilindro11 = new THREE.Line( geoCilindro11, matPunto );
+					var cilindro12 = new THREE.Line( geoCilindro11, matPunto );
+
+
+
+
+
+
+			//CREA EL SEMICIRCULO
+		var circleGeometry= new THREE.Geometry();
+		var re = 180;
+		var re2 = 360;
+
+		for(var j=-180; j<re; j++){
+  		     for(var i=-360; i<re2; i++){
+         		var line = new THREE.Vector3();
+				line.x = 2 * Math.cos(Math.PI*j/re);	
+				line.z = 2 * Math.cos(Math.PI*i/re2)*Math.sin(Math.PI*j/re); 					
+		        line.y = 2 * Math.sin(Math.PI*i/re2)*Math.sin(Math.PI*j/re);
+				if( line.x >= 0){
+					break;
+				}
+         		circleGeometry.vertices.push(line); 				
+  		   }
+ 		}
+         
+		var material = new THREE.MeshBasicMaterial({color:0xED5F2D, size: 0.1}); 
+		var circle = new THREE.Line(circleGeometry, material);
+		scene.add(circle);
+		  
+		  	//AGREGAR A LA ESCENA
+		  	//scene.add( gridHelperXY );
+            scene.add( gridHelperXZ );
+		  	scene.add( arrowX );	
+		  	scene.add( arrowY );	
+		  	scene.add( arrowZ );	
+			scene.add( cilindro );
+			scene.add( cilindro1 );
+			scene.add( cilindro2 );
+			scene.add( cilindro4 );
+				scene.add( cilindro5 );
+				scene.add( cilindro6 );
+				scene.add( cilindro7 );
+				scene.add( cilindro8 );
+				scene.add( cilindro9 );
+				scene.add( cilindro10 );
+				scene.add( cilindro11 );
+				scene.add( cilindro12 );
+		
+			
+			camera.position.x = 5;
+			camera.position.y = 15;	 
+		  	camera.position.z = 15;
+
+		  	cilindro.position.y= 3;
+		  		cilindro2.position.x= 3;
+		  	circle.position.y= 1;
+		  	circle.position.x = -4;
+		  	circle.rotation.y=5 ;
+		  	  	circle.rotation.x =-0.2 ;
+		  	circle.rotation.z=-5 ;
+		  	cilindro4.position.x=3;
+		  		cilindro4.position.y=3;
+			cilindro5.position.y=3;
+			cilindro6.position.y=6;
+			cilindro7.position.x=-4;
+			cilindro7.position.y=1.5;
+			cilindro7.rotation.y=2;
+			cilindro8.position.x=-4;
+			cilindro8.position.y=6.3;
+			cilindro9.position.z=4;
+		cilindro10.position.z=-4;
+		cilindro11.position.z=-4;
+		cilindro11.position.y=3;
+		cilindro12.position.z=4;
+		cilindro12.position.y=3;
+
+		  	camera.lookAt( origin );
+			}
+    
+
+    function animate() {
+    			
+
+        render();
+        requestAnimationFrame( animate );
+    }
+    
+    function render(){
+
+        var dtime = Date.now()-startTime;
+        camera.position.x = 15*Math.cos(dtime/1000);
+        camera.position.z = 15*Math.sin(dtime/1000);
+        camera.lookAt( 0, 0, 0 );
+        renderer.render( scene, camera );
+    }
+    </script>
+  </body>
+</html>
